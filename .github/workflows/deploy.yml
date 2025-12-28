@@ -7,6 +7,12 @@ on:
 jobs:
   test:
     environment: testing
+    env:
+      MONGO_CLUSTER_ADDRESS: ${{ secrets.MONGO_CLUSTER_ADDRESS }}
+      MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
+      MONGO_DB_USER: ${{ secrets.MONGO_DB_USER }}
+      MONGO_DB_PASSWORD: ${{ secrets.MONGO_DB_PASSWORD }}
+      PORT: ${{ secrets.PORT }}
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
@@ -19,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run server
-        run: npm start & npx wait-on http://127.0.0.1:XYZ
+        run: npm start & npx wait-on http://127.0.0.1:${{ secrets.PORT }}
       - name: Run tests
         run: npm test
       - name: Output information
@@ -30,4 +36,8 @@ jobs:
     steps:
       - name: Output information
         run: |        
-          echo "..."
+          echo "MONGO_CLUSTER_ADDRESS: ${{ secrets.MONGO_CLUSTER_ADDRESS }}"
+          echo "MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}"
+          echo "MONGO_DB_USER: ${{ secrets.MONGO_DB_USER }}"
+          echo "MONGO_DB_PASSWORD: ${{ secrets.MONGO_DB_PASSWORD }}"
+          echo "PORT: ${{ secrets.PORT }}"
